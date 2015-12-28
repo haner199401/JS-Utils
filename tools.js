@@ -1,4 +1,7 @@
 var Tools = (function () {
+    
+    //长方法名称存储，以便于压缩文件尺寸
+    var hasOwnProperty = Object.prototype.hasOwnProperty;
 
     /**
      * 占位符替换
@@ -55,6 +58,17 @@ var Tools = (function () {
         document.getElementsByTagName("head")[0].appendChild(el);
     }
 
+    /**
+     * 对象判空
+     * @param obj
+     */
+    function isEmpty(obj) {
+        if (obj == null) return true;
+        if (obj.length > 0)    return false;
+        if (obj.length === 0)  return true;
+        for (var key in obj) if (hasOwnProperty.call(obj, key)) return false;
+        return true;
+    }
 
     /**
      * 接口
@@ -65,6 +79,7 @@ var Tools = (function () {
     api.renderMsg = renderMsg;
     api.getParameterByName = getParameterByName;
     api.loadScript = loadScript;
+    api.isEmpty = isEmpty;
 
     return api;
 })();
