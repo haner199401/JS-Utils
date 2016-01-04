@@ -71,6 +71,17 @@ var Tools = (function () {
     }
 
     /**
+     * IE浏览器判断
+     * @param version 版本号码
+     * isIE(8) isIE(9) ...
+     */
+    function isIE(version){
+    	var b = document.createElement('b')
+    	b.innerHTML = '<!--[if IE ' + version + ']><i></i><![endif]-->'
+    	return b.getElementsByTagName('i').length === 1
+	}
+
+    /**
      * 接口
      * @type {{}}
      */
@@ -80,6 +91,7 @@ var Tools = (function () {
     api.getParameterByName = getParameterByName;
     api.loadScript = loadScript;
     api.isEmpty = isEmpty;
+    api.isIE = isIE;
 
     return api;
 })();
