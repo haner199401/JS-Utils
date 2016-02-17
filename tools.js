@@ -81,6 +81,43 @@ var Tools = (function () {
     	return b.getElementsByTagName('i').length === 1
 	}
 
+	/**
+     * 判断某个对象是否有指定的className
+     * @param element
+     * @param class
+     */
+	function hasClass(ele,cls) {
+		return ele.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
+	}
+
+	/**
+     * 给指定对象添加className
+     * @param element
+     * @param class
+     */ 
+	function addClass(ele,cls) {
+		if (!hasClass(ele,cls)) ele.className += " "+cls;
+	}
+
+	/**
+     * 删除className
+     * @param element
+     * @param class
+     */
+	function removeClass(ele,cls) {
+		if (hasClass(ele,cls)) {
+			var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
+			ele.className=ele.className.replace(reg,' ');
+		}
+	}
+
+
+
+
+
+
+
+
     /**
      * 接口
      * @type {{}}
@@ -92,6 +129,9 @@ var Tools = (function () {
     api.loadScript = loadScript;
     api.isEmpty = isEmpty;
     api.isIE = isIE;
+    api.removeClass = removeClass;
+    api.addClass = addClass;
+    api.hasClass = hasClass;
 
     return api;
 })();
