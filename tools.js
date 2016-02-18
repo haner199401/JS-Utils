@@ -81,7 +81,7 @@ var Tools = (function () {
     	return b.getElementsByTagName('i').length === 1
 	}
 
-	/**
+    /**
      * 判断某个对象是否有指定的className
      * @param element
      * @param class
@@ -90,7 +90,7 @@ var Tools = (function () {
 		return ele.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
 	}
 
-	/**
+    /**
      * 给指定对象添加className
      * @param element
      * @param class
@@ -99,7 +99,7 @@ var Tools = (function () {
 		if (!hasClass(ele,cls)) ele.className += " "+cls;
 	}
 
-	/**
+    /**
      * 删除className
      * @param element
      * @param class
