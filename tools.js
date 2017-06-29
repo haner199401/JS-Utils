@@ -22,7 +22,6 @@ var Tools = (function () {
         return tpl;
     }
 
-
     /**
      * 路由 key 获取 value
      * @param name 路由中 key
@@ -34,7 +33,6 @@ var Tools = (function () {
             results = regex.exec(location.search);
         return results === null ? "" : decodeURIComponent(results[1]);
     }
-
 
     /**
      * 动态加载 script 脚本
