@@ -1,5 +1,5 @@
 var Tools = (function () {
-    
+
     //长方法名称存储，以便于压缩文件尺寸
     var hasOwnProperty = Object.prototype.hasOwnProperty;
 
@@ -49,7 +49,7 @@ var Tools = (function () {
         if (callback) {
             el.onload = el.onreadystatechange = function () {
                 var status = this.readyState;
-                if (!complete && (!status || status == "loaded" || status == "complete")) {
+                if (!complete && (!status || status === "loaded" || status === "complete")) {
                     complete = true;
                     callback();
                 }
@@ -62,8 +62,8 @@ var Tools = (function () {
      * 对象判空
      * @param obj
      */
-    function isEmpty(obj) {
-        if (obj == null) return true;
+    function isEmptyObj(obj) {
+        if (obj === null) return true;
         if (obj.length > 0)    return false;
         if (obj.length === 0)  return true;
         for (var key in obj) if (hasOwnProperty.call(obj, key)) return false;
@@ -75,63 +75,130 @@ var Tools = (function () {
      * @param version 版本号码
      * isIE(8) isIE(9) ...
      */
-    function isIE(version){
-    	var b = document.createElement('b')
-    	b.innerHTML = '<!--[if IE ' + version + ']><i></i><![endif]-->'
-    	return b.getElementsByTagName('i').length === 1
-	}
-
-	/**
-     * 判断某个对象是否有指定的className
-     * @param element
-     * @param class
-     */
-	function hasClass(ele,cls) {
-		return ele.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
-	}
-
-	/**
-     * 给指定对象添加className
-     * @param element
-     * @param class
-     */ 
-	function addClass(ele,cls) {
-		if (!hasClass(ele,cls)) ele.className += " "+cls;
-	}
-
-	/**
-     * 删除className
-     * @param element
-     * @param class
-     */
-	function removeClass(ele,cls) {
-		if (hasClass(ele,cls)) {
-			var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
-			ele.className=ele.className.replace(reg,' ');
-		}
-	}
-
-
-
-
-
-
-
+    function isIE(version) {
+        var b = document.createElement('b');
+        b.innerHTML = '<!--[if IE ' + version + ']><i></i><![endif]-->';
+        return b.getElementsByTagName('i').length === 1;
+    }
 
     /**
-     * 接口
-     * @type {{}}
+     * 判断某个对象是否有指定的className
+     * @param ele
+     * @param cls
      */
-    var api = {};
+    function hasClass(ele, cls) {
+        return ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+    }
 
-    api.renderMsg = renderMsg;
-    api.getParameterByName = getParameterByName;
-    api.loadScript = loadScript;
-    api.isEmpty = isEmpty;
-    api.isIE = isIE;
-    api.removeClass = removeClass;
-    api.addClass = addClass;
-    api.hasClass = hasClass;
+    /**
+     * 给指定对象添加className
+     * @param ele
+     * @param cls
+     */
+    function addClass(ele, cls) {
+        if (!hasClass(ele, cls)) ele.className += " " + cls;
+    }
 
-    return api;
+    /**
+     * 删除className
+     * @param ele
+     * @param cls
+     */
+    function removeClass(ele, cls) {
+        if (hasClass(ele, cls)) {
+            var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
+            ele.className = ele.className.replace(reg, ' ');
+        }
+    }
+
+    /**
+     * 实现字符串长度截取 省略号
+     * @param str
+     * @param len
+     * @returns {string}
+     */
+    function cutStr(str, len) {
+        var temp;
+        var icount = 0;
+        var patrn = /[^\x00-\xff]/;
+        var strre = "";
+        var strLen = str.length;
+        for (var i = 0; i < strLen; i++) {
+            if (icount < len - 1) {
+                temp = str.substr(i, 1);
+                if (patrn.exec(temp) === null) {
+                    icount = icount + 1
+                } else {
+                    icount = icount + 2
+                }
+                strre += temp
+            } else {
+                break
+            }
+        }
+        return strre + "..."
+    }
+
+    /**
+     * 添加事件兼容
+     * @param oTarget
+     * @param sEvtType
+     * @param fnHandle
+     */
+    function addEvent(oTarget, sEvtType, fnHandle) {
+        if (!oTarget) {
+            return;
+        }
+        if (oTarget.addEventListener) {
+            oTarget.addEventListener(sEvtType, fnHandle, false);
+        } else if (oTarget.attachEvent) {
+            oTarget.attachEvent("on" + sEvtType, fnHandle);
+        } else {
+            oTarget["on" + sEvtType] = fnHandle;
+        }
+    }
+
+    /**
+     * 判断变量是否空值
+     * undefined, null, '', false, 0, [], {} 均返回true，否则返回false
+     */
+    function isEmpty(v) {
+        switch (typeof v) {
+            case 'undefined' :
+                return true;
+            case 'string'    :
+                if (v.trim().length === 0) return true;
+                break;
+            case 'boolean'   :
+                if (!v) return true;
+                break;
+            case 'number'    :
+                if (0 === v) return true;
+                break;
+            case 'object'    :
+                if (v === null) return true;
+                if (v.length > 0) return false;
+                if (v.length === 0)  return true;
+                for (var key in v) if (hasOwnProperty.call(v, key)) return false;
+                break;
+        }
+        return false;
+    }
+
+    /**
+     * API
+     */
+    return {
+        renderMsg: renderMsg,
+        getParameterByName: getParameterByName,
+        loadScript: loadScript,
+        isEmptyObj: isEmptyObj,
+        isEmpty: isEmpty,
+        isIE: isIE,
+        removeClass: removeClass,
+        addClass: addClass,
+        hasClass: hasClass,
+        cutStr: cutStr,
+        addEvent: addEvent,
+    };
 })();
